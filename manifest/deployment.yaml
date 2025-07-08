@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-deployment
+  namespace: angularwebapp
+  labels:
+    app: angularapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: angularapp
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 20%
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: angularapp
+    spec:
+      terminationGracePeriodSeconds: 1800
+      containers:
+      - name: angularnodeapp
+        image: ashokdocker2022/angularapp:v1
+        imagePullPolicy: IfNotPresent
+          #command: ["catalina.sh", "run"]
+        ports:
+        - containerPort: 4204
+      imagePullSecrets:
+        - name: dockercred
